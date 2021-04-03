@@ -799,7 +799,9 @@ int main()
 {
     int gender;
     char answer[MAX_ITEMS] = {0,};
+    char type[5] = {0};
     int type_count[MAX_TYPES] = {0,};
+    char buf[256];
 
     gender = getAnswer("Input your gender (A:Male B:Female): ", 2);
 
@@ -825,18 +827,24 @@ int main()
         printf("%d %d\n", i, type_count[i]);
     }*/
 
-    if (type_count[TYPE_E] >= type_count[TYPE_I]) {
-        printf("E");
-    } else printf("I");
-    if (type_count[TYPE_S] >= type_count[TYPE_N]) {
-        printf("S");
-    } else printf("N");
-    if (type_count[TYPE_T] >= type_count[TYPE_F]) {
-        printf("T");
-    } else printf("F");
-    if (type_count[TYPE_J] >= type_count[TYPE_P]) {
-        printf("J");
-    } else printf("P");
+    type[0] = (type_count[TYPE_E] >= type_count[TYPE_I]) ? 'E' : 'I';
+    type[1] = (type_count[TYPE_S] >= type_count[TYPE_N]) ? 'S' : 'N';
+    type[2] = (type_count[TYPE_T] >= type_count[TYPE_F]) ? 'T' : 'F';
+    type[3] = (type_count[TYPE_J] >= type_count[TYPE_P]) ? 'J' : 'P';
+    printf("Your type is %s.\n", type);
+
+    char fname[128];
+    sprintf(fname, "data/%s.txt", type);
+    FILE *fp = fopen(fname, "r");
+    if (!fp) {
+        printf("ERROR: can't open data '%s'.\n", fname);
+        return -1;
+    }
+
+    while (fgets(buf, sizeof(buf), fp)) {
+        printf("%s", buf);
+    }
+    fclose(fp);
 
     return 0;
 }
